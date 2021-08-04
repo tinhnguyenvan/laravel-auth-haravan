@@ -3,6 +3,8 @@
 <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="description" content="Laravel Auth Haravan">
+    <meta name="author" content="tweb.com.vn">
     <title>Laravel Auth Haravan</title>
     <link rel="canonical" href="{{ url('/') }}">
     <link href="{{ url('css/bootstrap.min.css') }}" rel="stylesheet" />

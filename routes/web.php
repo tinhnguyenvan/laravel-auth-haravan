@@ -15,6 +15,10 @@ use Illuminate\Support\Facades\Route;
 |
 */
 
-Route::get('/', [DashboardController::class, 'index']);
+Route::get('/', function () {
+    return view('login.index');
+});
+
+Route::get('/dashboard', [DashboardController::class, 'index']);
 Route::get('/login', [HaravanAuthController::class, 'redirectToProvider']);
 Route::get('/login_callback', [HaravanAuthController::class, 'handleProviderCallback']);
