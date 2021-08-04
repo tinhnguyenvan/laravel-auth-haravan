@@ -4,6 +4,8 @@ namespace App\Providers;
 
 use Laravel\Socialite\Two\AbstractProvider;
 use Laravel\Socialite\Two\ProviderInterface;
+use Laravel\Socialite\Two\User;
+use Illuminate\Support\Arr;
 
 class HaravanProvider extends AbstractProvider implements ProviderInterface
 {
@@ -45,17 +47,13 @@ class HaravanProvider extends AbstractProvider implements ProviderInterface
         return 'https://accounts.haravan.com/connect/token';
     }
 
-    /**
-     * {@inheritdoc}
-     */
-    public function getAccessToken($code)
+    protected function getTokenFields($code)
     {
-        $response = $this->getHttpClient()->post($this->getTokenUrl(), [
-            'headers' => ['Content-Type' => 'application/x-www-form-urlencoded'],
-            'body' => $this->getTokenFields($code),
-        ]);
-
-        return $this->parseAccessToken($response->getBody());
+        return Arr::add(
+            parent::getTokenFields($code),
+            'grant_type',
+            'authorization_code'
+        );
     }
 
     /**
@@ -66,8 +64,9 @@ class HaravanProvider extends AbstractProvider implements ProviderInterface
      */
     protected function getUserByToken($token)
     {
-        $response = $this->getHttpClient()->get('https://apis.haravan.com/web/shop.json', [
+        $response = $this->getHttpClient()->get('https://accounts.haravan.com/connect/userinfo', [
             'headers' => [
+                'Accept' => 'application/json',
                 'Authorization' => 'Bearer ' . $token,
             ],
         ]);
@@ -77,6 +76,14 @@ class HaravanProvider extends AbstractProvider implements ProviderInterface
 
     protected function mapUserToObject(array $user)
     {
-
+        return (new User())->setRaw($user)->map([
+            'id' => Arr::get($user, 'sub'),
+            'name' => Arr::get($user, 'name'),
+            'email' => Arr::get($user, 'email'),
+            'locale' => Arr::get($user, 'locale'),
+            'role' => Arr::get($user, 'role'),
+            'org_id' => (int)Arr::get($user, 'orgid'),
+            'org_name' => Arr::get($user, 'orgname'),
+        ]);
     }
 }

@@ -15,10 +15,16 @@ use Illuminate\Support\Facades\Route;
 |
 */
 
-Route::get('/', function () {
-    return view('login.index');
-});
+Route::get('/', [HaravanAuthController::class, 'index'])->name('index');
 
-Route::get('/dashboard', [DashboardController::class, 'index']);
-Route::get('/login', [HaravanAuthController::class, 'redirectToProvider']);
-Route::get('/login_callback', [HaravanAuthController::class, 'handleProviderCallback']);
+Route::get('/login', [HaravanAuthController::class, 'redirectToProvider'])->name('login');
+Route::post('/login_callback', [HaravanAuthController::class, 'handleProviderCallback']);
+
+Route::middleware(['auth'])->group(
+    function () {
+        Route::get('/dashboard', [DashboardController::class, 'index'])->name('dashboard');
+
+        Route::get('/logout', [HaravanAuthController::class, 'logout']);
+    }
+);
+
