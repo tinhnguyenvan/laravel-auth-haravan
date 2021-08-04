@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\HaravanAuthController;
 use Illuminate\Support\Facades\Route;
 
@@ -14,7 +15,6 @@ use Illuminate\Support\Facades\Route;
 |
 */
 
-
-Route::get('/', [HaravanAuthController::class, 'redirectToProvider']);
+Route::get('/', [DashboardController::class, 'index']);
 Route::get('/login', [HaravanAuthController::class, 'redirectToProvider']);
 Route::get('/login_callback', [HaravanAuthController::class, 'handleProviderCallback']);

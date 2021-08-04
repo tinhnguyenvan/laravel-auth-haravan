@@ -4,21 +4,25 @@ namespace App\Providers;
 
 use Laravel\Socialite\Two\AbstractProvider;
 use Laravel\Socialite\Two\ProviderInterface;
-use Laravel\Socialite\Two\User;
 
 class HaravanProvider extends AbstractProvider implements ProviderInterface
 {
+    protected $scopeSeparator = '';
 
     protected $scopes = [
         'openid',
+        'org',
+        'phone',
+        'email',
         'userinfo',
         'profile',
-        'org',
-        'email',
-        'phone',
+        'com.read_customers',
+        'com.write_customers',
+        'com.read_products',
+        'com.write_products',
+        'com.read_orders',
+        'com.write_orders',
     ];
-
-    protected $popup = true;
 
     /**
      * Get the authentication URL for the provider.
@@ -71,19 +75,8 @@ class HaravanProvider extends AbstractProvider implements ProviderInterface
         return json_decode($response->getBody(), true);
     }
 
-    /**
-     * Map the raw user array to a Socialite User instance.
-     *
-     * @param  array $user
-     * @return \Laravel\Socialite\Two\User
-     */
     protected function mapUserToObject(array $user)
     {
-        return (new User)->setRaw($user)->map([
-            'id' => $user['id'],
-            'nickname' => $user['display_name'],
-            'name' => $user['display_name'],
-            'avatar' => !empty($user['images']) ? $user['images'][0]['url'] : null,
-        ]);
+
     }
 }
