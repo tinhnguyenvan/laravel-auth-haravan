@@ -30,4 +30,10 @@ return [
         'region' => env('AWS_DEFAULT_REGION', 'us-east-1'),
     ],
 
+    'haravan' => [
+        'client_id' => env('HARAVAN_ACCESS_KEY_ID'),
+        'client_secret' => env('HARAVAN_SECRET_ACCESS_KEY'),
+        'redirect' => env('HARAVAN_REDIRECT')
+    ]
+
 ];

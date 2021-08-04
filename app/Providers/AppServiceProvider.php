@@ -23,6 +23,15 @@ class AppServiceProvider extends ServiceProvider
      */
     public function boot()
     {
-        //
+        $this->bootHaravanSocialite();
+    }
+
+    private function bootHaravanSocialite()
+    {
+        $socialite = $this->app->make('Laravel\Socialite\Contracts\Factory');
+        $socialite->extend('haravan', function ($app) use ($socialite) {
+            $config = $app['config']['services.haravan'];
+            return $socialite->buildProvider(HaravanProvider::class, $config);
+        });
     }
 }
