@@ -7,7 +7,7 @@ use Laravel\Socialite\Two\ProviderInterface;
 
 class HaravanProvider extends AbstractProvider implements ProviderInterface
 {
-    protected $scopeSeparator = '';
+    protected $scopeSeparator = ' ';
 
     protected $scopes = [
         'openid',
@@ -51,7 +51,7 @@ class HaravanProvider extends AbstractProvider implements ProviderInterface
     public function getAccessToken($code)
     {
         $response = $this->getHttpClient()->post($this->getTokenUrl(), [
-            'headers' => ['Authorization' => 'Basic ' . base64_encode($this->clientId . ':' . $this->clientSecret)],
+            'headers' => ['Content-Type' => 'application/x-www-form-urlencoded'],
             'body' => $this->getTokenFields($code),
         ]);
 
